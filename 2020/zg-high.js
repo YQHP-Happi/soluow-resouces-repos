@@ -17,9 +17,11 @@
     if(json.retcode !== 0){
         return;
     }
-
+    var div = $('<div class="zgdiv"></div>');
+    var idm = $('<button style="display:none">复制IDM地址</button>')
+    div.append(idm);
     for(var d of json.data.list){
-        var dl = $('<dl></dl>');
+        var dl = $('<dl class="zgdl"></dl>');
         dl.append(`<dt>${d.title}</dt>`)
         var i = 0;
         for(var item of d.children){
@@ -29,20 +31,32 @@
                  dd = $(`<dd>${item.name}</dd>`);
                 var ol = $('<ol></ol>');
                  for(var pdf of item.pdf_info){
-                   ol.append(`<li><a href='${pdf.url}' target='_blank'>${pdf.name}</a></li>`)
+                   ol.append(`<li><a nfile href='${pdf.url}' target='_blank'>${pdf.name}</a></li>`)
                  }
                 dd.append(ol);
             }else if(item.module_type == 6){
                  dd = $(`<dd><a href='http://pcvod.offcncloud.com/#/vod?account=${item.room_id}' target='_blank'>${++i}.${item.name}.ts</a></dd>`);
+
+                // 普通文件
             }else if(item.module_type == 1){
-                 dd = $(`<dd><a href='${item.url}' target='_blank'>${item.name}</a></dd>`);
+                 dd = $(`<dd><a nfile  href='${item.url}' target='_blank'>${item.name}</a></dd>`);
             }
             dl.append(dd)
 
         }
-       body.append(dl);
+       div.append(dl);
 
     }
-    $('dl').css('margin-left','10px');
+    div.css({'padding':'0 10px','margin':'10px','border':'1px #ccc solid'});
+    body.prepend(div);
+
+    idm.on('click',function(){
+       // 获取讲义地址
+        $('a[nfile]').each(function(i,dom){
+            console.log($(dom).text().trim()+","+dom.href)
+        })
+
+       alert('复制成功');
+    });
 
 })();
