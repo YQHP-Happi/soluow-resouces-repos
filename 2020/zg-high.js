@@ -12,6 +12,18 @@
 
 (function() {
     'use strict';
+
+     function copy(text) {
+            var oInput = document.createElement('textarea');
+            oInput.value = text;
+            document.body.appendChild(oInput);
+            oInput.select();
+            document.execCommand("Copy");
+            oInput.className = 'oInput';
+            oInput.style.display = 'none';
+            document.body.removeChild(oInput);
+        }
+
    var body = $('body');
    var json = JSON.parse($('#json').text());
     if(json.retcode !== 0){
@@ -35,7 +47,7 @@
                  }
                 dd.append(ol);
             }else if(item.module_type == 6){
-                 dd = $(`<dd><a href='http://pcvod.offcncloud.com/#/vod?account=${item.room_id}' target='_blank'>${++i}.${item.name}.ts</a></dd>`);
+                 dd = $(`<dd><a tsfile href='javascript:void(0);' data-href='http://pcvod.offcncloud.com/#/vod?account=${item.room_id}' >${++i}.${item.name}.ts</a></dd>`);
 
                 // 普通文件
             }else if(item.module_type == 1){
@@ -57,6 +69,13 @@
         })
 
        alert('复制成功');
+    });
+
+    div.on('click','a[tsfile]',function(){
+        copy($(this).text().trim());
+        open($(this).data('href'),'target','');
+        $(this).css('color','red');
+
     });
 
 })();
